@@ -18,21 +18,19 @@ ResourceCheckVoice::ResourceCheckVoice() : ResourceTemplate() {}
 void ResourceCheckVoice::handlePost(Poco::Net::HTTPServerRequest& request, Poco::Net::HTTPServerResponse& response) {
     std::cout<<"Processing post request."<<std::endl;
     // TODO: setup standard for request headers
-    //response.set("Accept", request.get("Accept"));
-    //response.set("Content-Type", request.get("Content-Type"));
-    //response.set("RequestId", request.get("RequestId"));
+    response.set("Content-Type", "application/json");
+    response.set("RequestId", "TODO");
 
     std::stringstream buffer;
     buffer << request.stream().rdbuf();
 
-    std::cout<<"Request body: \n"<<buffer.str()<<std::endl;
-
     // TODO: get wav file and check if can recognize voice
+
     response.setStatusAndReason(Poco::Net::HTTPResponse::HTTP_OK);
 
     std::ostream &result = response.send();
     // TODO: as msg return message with result
-    //result << msg;
+    result << R"({ "status": true, "name": "TestName" })";
     result.flush();
 }
 

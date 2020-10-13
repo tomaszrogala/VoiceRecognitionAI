@@ -10,6 +10,10 @@
 #include <Poco/Net/HTTPServerRequest.h>
 #include <Poco/Net/HTTPServerResponse.h>
 #include <Poco/Net/HTTPResponse.h>
+#include <Poco/JSON/Object.h>
+
+#include "RestUtils.h"
+#include "RecognitionStarter.h"
 
 namespace Rest {
 
@@ -17,20 +21,24 @@ ResourceCheckVoice::ResourceCheckVoice() : ResourceTemplate() {}
 
 void ResourceCheckVoice::handlePost(Poco::Net::HTTPServerRequest& request, Poco::Net::HTTPServerResponse& response) {
     std::cout<<"Processing post request."<<std::endl;
-    // TODO: setup standard for request headers
+
     response.set("Content-Type", "application/json");
-    response.set("RequestId", "TODO");
+    response.set("RequestId", RestUtils::generateRequestId());
 
     std::stringstream buffer;
     buffer << request.stream().rdbuf();
 
-    // TODO: get wav file and check if can recognize voice
+    // TODO: get audio file, save in path and check if can recognize voice
+    Core::RecognitionStarter recognitionStarter("AudioFile");
+    recognitionStarter.start();
+
+    Poco::JSON::Object jsonObject;
+    jsonObject.set("status", recognitionStarter.isVoiceKnown());
+    jsonObject.set("name", recognitionStarter.getVoiceOwner());
 
     response.setStatusAndReason(Poco::Net::HTTPResponse::HTTP_OK);
-
     std::ostream &result = response.send();
-    // TODO: as msg return message with result
-    result << R"({ "status": true, "name": "TestName" })";
+    jsonObject.stringify(result);
     result.flush();
 }
 

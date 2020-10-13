@@ -20,8 +20,10 @@ target_link_libraries(VoiceRecognitionAI PUBLIC
         Poco::Foundation
         Poco::Net
         Poco::Util
-        Rest)
+        Rest
+        Core)
 
 # Internal components
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/src/Rest)
+add_subdirectory(${PROJECT_SOURCE_DIR}/src/Core)

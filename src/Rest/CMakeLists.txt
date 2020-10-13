@@ -11,7 +11,10 @@ add_library(Rest STATIC
         ResourceCheckVoice.cpp
         ResourceCheckVoice.h
         ResourceFactory.cpp
-        ResourceFactory.h)
+        ResourceFactory.h
+        RestUtils.cpp
+        RestUtils.h)
 
 target_include_directories(Rest PUBLIC
-        ${POCO_INCLUDE_DIR})
+        ${POCO_INCLUDE_DIR}
+        ${PROJECT_SOURCE_DIR}/src/Core)

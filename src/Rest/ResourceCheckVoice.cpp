@@ -29,12 +29,11 @@ void ResourceCheckVoice::handlePost(Poco::Net::HTTPServerRequest& request, Poco:
     buffer << request.stream().rdbuf();
 
     // TODO: get audio file, save in path and check if can recognize voice
-    Core::RecognitionStarter recognitionStarter("AudioFile");
-    recognitionStarter.start();
+    Core::RecognitionResult recognitionResult = Core::RecognitionStarter::getInstance().identify("");
 
     Poco::JSON::Object jsonObject;
-    jsonObject.set("status", recognitionStarter.isVoiceKnown());
-    jsonObject.set("name", recognitionStarter.getVoiceOwner());
+    jsonObject.set("status", recognitionResult.getProbability());
+    jsonObject.set("name", recognitionResult.getIdentifier());
 
     response.setStatusAndReason(Poco::Net::HTTPResponse::HTTP_OK);
     std::ostream &result = response.send();

@@ -6,26 +6,28 @@
 #define VOICERECOGNITIONAI_RECOGNITIONSTARTER_H
 
 #include <string>
+#include <map>
+#include <mutex>
+
+#include "RecognitionResult.h"
+#include "VoiceSample.h"
 
 namespace Core {
 
 class RecognitionStarter {
 public:
-    explicit RecognitionStarter(std::string filePath);
+// TODO: instead of using singleton, store samples in database
+    static RecognitionStarter getInstance();
     ~RecognitionStarter();
 
-    void start();
-
-    bool isVoiceKnown() const;
-    void setVoiceKnown(bool isVoiceKnown);
-    const std::string& getVoiceOwner() const;
-    void setVoiceOwner(const std::string& voiceOwner);
+    RecognitionResult identify(const std::string& filePathToRecognize);
 
 private:
-    bool voiceKnown;
-    std::string voiceOwner;
-    std::string audioFilePath;
+    RecognitionStarter();
+    void loadVoiceSample(const std::string& identifier, const VoiceSample& voiceSample);
 
+    static RecognitionStarter instance;
+    std::map<std::string, VoiceSample> storedVoiceSamples;
 };
 
 }

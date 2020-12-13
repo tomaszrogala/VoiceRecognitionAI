@@ -4,32 +4,24 @@
 
 #include "RecognitionStarter.h"
 
-#include <utility>
-
 namespace Core {
 
-RecognitionStarter::RecognitionStarter(std::string filePath) : voiceKnown(false), voiceOwner(), audioFilePath(std::move(filePath)) {}
+RecognitionStarter RecognitionStarter::getInstance() {
+    return instance;
+}
+
+RecognitionResult RecognitionStarter::identify(const std::string& filePathToRecognize) {
+    return RecognitionResult("", 0, 0.0);
+}
 
 RecognitionStarter::~RecognitionStarter() = default;
 
-void RecognitionStarter::start() {
-    // TODO: do main job to recognize voice from audioFilePath
+RecognitionStarter::RecognitionStarter() {
+    loadVoiceSample("test1", *(new VoiceSample()));
 }
 
-bool RecognitionStarter::isVoiceKnown() const {
-    return voiceKnown;
-}
-
-void RecognitionStarter::setVoiceKnown(bool isVoiceKnown) {
-    this->voiceKnown = isVoiceKnown;
-}
-
-const std::string& RecognitionStarter::getVoiceOwner() const {
-    return voiceOwner;
-}
-
-void RecognitionStarter::setVoiceOwner(const std::string& ownerName) {
-    this->voiceOwner = ownerName;
+void RecognitionStarter::loadVoiceSample(const std::string& identifier,  const VoiceSample& voiceSample) {
+    storedVoiceSamples[identifier] = voiceSample;
 }
 
 }

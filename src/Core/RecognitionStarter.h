@@ -7,7 +7,6 @@
 
 #include <string>
 #include <map>
-#include <mutex>
 
 #include "RecognitionResult.h"
 #include "VoiceSample.h"
@@ -23,11 +22,13 @@ public:
     RecognitionResult identify(const std::string& filePathToRecognize);
 
 private:
+    static float DEFAULT_SAMPLE_RATE;
+
     RecognitionStarter();
     void loadVoiceSample(const std::string& identifier, const VoiceSample& voiceSample);
 
-    static RecognitionStarter instance;
-    std::map<std::string, VoiceSample> storedVoiceSamples;
+    std::map<std::string, VoiceSample> voiceSampleLibrary;
+    VoiceSample universalModel;
 };
 
 }

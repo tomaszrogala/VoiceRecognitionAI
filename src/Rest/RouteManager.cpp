@@ -4,26 +4,27 @@
 
 #include "RouteManager.h"
 
-#include <iostream>
-
 #include <Poco/Net/HTTPServerRequest.h>
 
+#include "Logger.h"
 #include "ResourceNotFound.h"
 #include "ResourceCheckVoice.h"
 #include "ResourceFactory.h"
 
+using namespace Utils;
+
 namespace Rest {
 
 RouteManager::RouteManager() {
-    std::cout<<"Preparing routes."<<std::endl;
+    Logger::debug("Preparing routes.");
 
     routeMap["/vc/check"] = ResourceFactory::CHECK_VOICE;
 
-    std::cout<<"Routes added."<<std::endl;
+    Logger::debug("Routes added.");
 }
 
 Poco::Net::HTTPRequestHandler* RouteManager::createRequestHandler(const Poco::Net::HTTPServerRequest& request) {
-    std::cout<<"Getting resource: "<<request.getURI()<<std::endl;
+    Logger::info("Getting resource: " + request.getURI());
     return getResource(request.getURI());
 }
 

@@ -17,4 +17,5 @@ add_library(Rest STATIC
 
 target_include_directories(Rest PUBLIC
         ${POCO_INCLUDE_DIR}
-        ${PROJECT_SOURCE_DIR}/src/Core)
+        ${PROJECT_SOURCE_DIR}/src/Core
+        ${PROJECT_SOURCE_DIR}/src/Utils)

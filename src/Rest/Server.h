@@ -15,7 +15,7 @@ public:
     Server();
     ~Server() override;
 
-    void setPort(int portNumber);
+    void setPort(unsigned short portNumber);
     void setRouteManager(Poco::Net::HTTPRequestHandlerFactory* routeManager);
 
 protected:
@@ -34,7 +34,7 @@ private:
     bool portOptionSet;
     bool configOptionSet;
 
-    int port;
+    unsigned short port;
     std::string endpoint;
 
     Poco::Net::HTTPRequestHandlerFactory* routeManagerInstance;

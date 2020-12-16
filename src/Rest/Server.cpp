@@ -10,6 +10,10 @@
 #include <Poco/Util/HelpFormatter.h>
 #include <Poco/Net/HTTPServer.h>
 
+#include "Logger.h"
+
+using namespace Utils;
+
 namespace Rest {
 
 Server::Server() :
@@ -22,7 +26,7 @@ routeManagerInstance() {}
 
 Server::~Server() = default;
 
-void Server::setPort(int portNumber) {
+void Server::setPort(unsigned short portNumber) {
     port = portNumber;
 }
 
@@ -67,17 +71,16 @@ void Server::uninitialize() {
 
 int Server::main(const std::vector<std::string>& args) {
     if(!helpRequested) {
-        // TODO: create some logger instead of using standard output
-        std::cout<<"Setting up server params."<<std::endl;
+        Logger::debug("Setting up server params.");
 
         auto *httpServerParams = new Poco::Net::HTTPServerParams();
 
-        std::cout<<"Starting REST Server..."<<std::endl;
+        Logger::info("Starting REST Server...");
 
         Poco::Net::HTTPServer httpServer(routeManagerInstance, Poco::Net::ServerSocket(port), httpServerParams);
 
-        std::cout<<"Voice Recognition AI Service started!"<<std::endl;
-        std::cout<<"Bind to endpoint: "<<endpoint<<":"<<port<<std::endl;
+        Logger::info("Voice Recognition AI Service started!");
+        Logger::debug("Host data: " + endpoint + ":" + std::to_string(port));
 
         httpServer.start();
         waitForTerminationRequest();

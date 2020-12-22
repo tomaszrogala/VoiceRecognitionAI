@@ -13,12 +13,12 @@ class VoiceSample {
 public:
     static std::vector<double> extractFeaturesFromSampleFile(const std::string& filePath, float sampleRate);
 
-    VoiceSample() = default;
+    VoiceSample();
     VoiceSample(const std::string& pathToSampleFile, float sampleRate);
     explicit VoiceSample(std::vector<double> features);
     VoiceSample(const VoiceSample& voiceSample);
 
-    double getDistance(const VoiceSample& voiceSample);
+    double getDistance(const VoiceSample& voiceSample) const;
     void merge(const std::vector<double>& features);
     void merge(const VoiceSample& voiceSample);
 
@@ -26,7 +26,6 @@ public:
     std::vector<double> getFeatures() const;
 
 private:
-
     std::vector<double> currentSampleFeatures;
     int mergeCount;
 

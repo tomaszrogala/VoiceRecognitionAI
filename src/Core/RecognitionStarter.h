@@ -28,7 +28,7 @@ private:
     void loadVoiceSample(const std::string& identifier, const VoiceSample& voiceSample);
 
     std::map<std::string, VoiceSample> voiceSampleLibrary;
-    VoiceSample universalModel;
+    std::shared_ptr<VoiceSample> universalModel;
 };
 
 }

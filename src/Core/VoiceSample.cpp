@@ -14,6 +14,7 @@ using namespace Utils;
 
 namespace Core {
 
+// TODO: implement extraction of features from "extractFeatures" from Recognito.java
 std::vector<double> VoiceSample::extractFeaturesFromSampleFile(const std::string& filePath, float sampleRate) {
     return std::vector<double>();
 }

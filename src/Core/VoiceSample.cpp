@@ -19,6 +19,8 @@ std::vector<double> VoiceSample::extractFeaturesFromSampleFile(const std::string
     return std::vector<double>();
 }
 
+VoiceSample::VoiceSample() : currentSampleFeatures(), mergeCount(0) {}
+
 VoiceSample::VoiceSample(const std::string& pathToSampleFile, float sampleRate)
 : VoiceSample(extractFeaturesFromSampleFile(pathToSampleFile, sampleRate)) {}
 
@@ -29,7 +31,7 @@ VoiceSample::VoiceSample(const VoiceSample& voiceSample)
 : currentSampleFeatures(voiceSample.currentSampleFeatures), mergeCount(1) {}
 
 // TODO
-double VoiceSample::getDistance(const VoiceSample& voiceSample) {
+double VoiceSample::getDistance(const VoiceSample& voiceSample) const {
     return 0;
 }
 

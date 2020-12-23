@@ -26,6 +26,8 @@ protected:
     virtual bool checkSupportedMethodsType(Poco::Net::HTTPServerRequest &request, Poco::Net::HTTPServerResponse &response);
 
 private:
+    void returnNotImplemented(Poco::Net::HTTPServerResponse& response);
+
     std::string baseUrl;
     std::string requestURI;
     std::string requestHost;

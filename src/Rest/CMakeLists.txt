@@ -13,7 +13,7 @@ add_library(Rest STATIC
         ResourceFactory.cpp
         ResourceFactory.h
         RestUtils.cpp
-        RestUtils.h)
+        RestUtils.h ResponseMessage.cpp ResponseMessage.h)
 
 target_include_directories(Rest PUBLIC
         ${POCO_INCLUDE_DIR}

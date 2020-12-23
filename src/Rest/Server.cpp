@@ -48,16 +48,8 @@ void Server::defineOptions(Poco::Util::OptionSet& options) {
             Poco::Util::Option("port", "p", "set port for server")
                     .required(false)
                     .repeatable(false)
-                    .argument("value")
+                    .argument("PortNumber")
                     .callback(Poco::Util::OptionCallback<Server>(this, &Server::handleSetPort))
-    );
-
-    options.addOption(
-            Poco::Util::Option("config", "c", "set path to config file")
-                    .required(false)
-                    .repeatable(false)
-                    .argument("value")
-                    .callback(Poco::Util::OptionCallback<Server>(this, &Server::handleSetConfig))
     );
 }
 
@@ -89,18 +81,15 @@ int Server::main(const std::vector<std::string>& args) {
     return Poco::Util::Application::EXIT_OK;
 }
 
-void Server::handleHelp(const std::string& key, const std::string& value) {
+void Server::handleHelp(const std::string&, const std::string&) {
     helpRequested = true;
     displayHelp();
     stopOptionsProcessing();
 }
 
-void Server::handleSetPort(const std::string& key, const std::string& value) {
-    // TODO
-}
-
-void Server::handleSetConfig(const std::string& key, const std::string& value) {
-    // TODO
+void Server::handleSetPort(const std::string&, const std::string& value) {
+    Logger::debug("Externally passed port: " + value);
+    port = std::stoi(value);
 }
 
 void Server::displayHelp() {

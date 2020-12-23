@@ -3,6 +3,7 @@
 //
 
 #include "ResourceTemplate.h"
+#include "ResponseMessage.h"
 
 #include <Poco/Net/HTTPServerRequest.h>
 #include <Poco/Net/HTTPServerResponse.h>
@@ -37,32 +38,31 @@ void ResourceTemplate::handleRequest(Poco::Net::HTTPServerRequest& request, Poco
         }
     }
     else{
-        // TODO: prepare response message
-        //ResponseRequest::changeStatusReason(405, response);
+        response.setStatus(Poco::Net::HTTPResponse::HTTP_METHOD_NOT_ALLOWED);
         std::ostream &errorStream = response.send();
-        //errorStream << StatusMessage(405, Poco::Net::HTTPResponse::HTTP_REASON_VERSION_NOT_SUPPORTED, "Unsupported method type").build();
+        errorStream << ResponseMessage().status(Poco::Net::HTTPResponse::HTTP_METHOD_NOT_ALLOWED).message("Unsupported method type.").build();
         errorStream.flush();
     }
 }
 
-void ResourceTemplate::handleGet(Poco::Net::HTTPServerRequest& request, Poco::Net::HTTPServerResponse& response) {
-    // TODO
+void ResourceTemplate::handleGet(Poco::Net::HTTPServerRequest&, Poco::Net::HTTPServerResponse& response) {
+    returnNotImplemented(response);
 }
 
-void ResourceTemplate::handlePost(Poco::Net::HTTPServerRequest& request, Poco::Net::HTTPServerResponse& response) {
-    // TODO
+void ResourceTemplate::handlePost(Poco::Net::HTTPServerRequest&, Poco::Net::HTTPServerResponse& response) {
+    returnNotImplemented(response);
 }
 
-void ResourceTemplate::handlePut(Poco::Net::HTTPServerRequest& request, Poco::Net::HTTPServerResponse& response) {
-    // TODO
+void ResourceTemplate::handlePut(Poco::Net::HTTPServerRequest&, Poco::Net::HTTPServerResponse& response) {
+    returnNotImplemented(response);
 }
 
-void ResourceTemplate::handleDelete(Poco::Net::HTTPServerRequest& request, Poco::Net::HTTPServerResponse& response) {
-    // TODO
+void ResourceTemplate::handleDelete(Poco::Net::HTTPServerRequest&, Poco::Net::HTTPServerResponse& response) {
+    returnNotImplemented(response);
 }
 
-void ResourceTemplate::handleOptions(Poco::Net::HTTPServerRequest& request, Poco::Net::HTTPServerResponse& response) {
-    // TODO
+void ResourceTemplate::handleOptions(Poco::Net::HTTPServerRequest&, Poco::Net::HTTPServerResponse& response) {
+    returnNotImplemented(response);
 }
 
 bool ResourceTemplate::checkSupportedMethodsType(Poco::Net::HTTPServerRequest& request, Poco::Net::HTTPServerResponse& response) {
@@ -72,4 +72,12 @@ bool ResourceTemplate::checkSupportedMethodsType(Poco::Net::HTTPServerRequest& r
            request.getMethod() == Poco::Net::HTTPRequest::HTTP_DELETE ||
            request.getMethod() == Poco::Net::HTTPRequest::HTTP_OPTIONS;
 }
+
+void ResourceTemplate::returnNotImplemented(Poco::Net::HTTPServerResponse& response) {
+    response.setStatus(Poco::Net::HTTPResponse::HTTP_NOT_IMPLEMENTED);
+    std::ostream &errorStream = response.send();
+    errorStream << ResponseMessage().status(Poco::Net::HTTPResponse::HTTP_NOT_IMPLEMENTED).message("Method currently not implemented.").build();
+    errorStream.flush();
+}
+
 }

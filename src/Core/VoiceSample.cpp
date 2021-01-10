@@ -75,9 +75,32 @@ VoiceSample::VoiceSample(std::vector<double> features)
 VoiceSample::VoiceSample(const VoiceSample& voiceSample)
 : currentSampleFeatures(voiceSample.currentSampleFeatures), mergeCount(1) {}
 
-// TODO
 double VoiceSample::getDistance(const VoiceSample& voiceSample) const {
-    return 0;
+        double distance;
+        auto features1 = this->getFeatures();
+        auto features2 = voiceSample.getFeatures();
+
+        if(features1.empty() || features1.empty()) {
+            return std::numeric_limits<double>::max();
+        }
+        else {
+            distance = -1.0;
+        }
+
+        if (distance < 0) {
+            if(features1.size() != features2.size()) {
+                Logger::error("Both features should have the same length. Received lengths of [" +
+                std::to_string(features1.size()) + "] and [" +
+                std::to_string(features2.size()) + "]");
+            }
+            distance = 0.0;
+            for (int i = 0; i < features1.size(); i++) {
+                double diff = features1[i] - features2[i];
+                distance += diff * diff;
+            }
+        }
+
+        return distance;
 }
 
 void VoiceSample::merge(const std::vector<double>& features) {

@@ -4,6 +4,8 @@
 
 #include "RecognitionStarter.h"
 
+#include <filesystem>
+
 #include "Logger.h"
 
 using namespace Utils;
@@ -11,6 +13,7 @@ using namespace Utils;
 namespace Core {
 
 float RecognitionStarter::DEFAULT_SAMPLE_RATE = 16000.0;
+std::string RecognitionStarter::TEST_DATA_ENVIRONMENT_VARIABLE = "TEST_DATA_LOCATION";
 
 RecognitionStarter RecognitionStarter::getInstance() {
     static RecognitionStarter instance;
@@ -24,6 +27,12 @@ RecognitionResult RecognitionStarter::identify(const std::string& filePathToReco
     }
 
     VoiceSample voiceSampleToRecognize(filePathToRecognize, DEFAULT_SAMPLE_RATE);
+    if(universalModel == nullptr) {
+        universalModel = std::make_shared<VoiceSample>(voiceSampleToRecognize);
+    }
+    else {
+        universalModel->merge(voiceSampleToRecognize);
+    }
     std::vector<RecognitionResult> resultArray;
 
     double distanceFromUniversalModel = voiceSampleToRecognize.getDistance(*universalModel);
@@ -44,10 +53,12 @@ RecognitionResult RecognitionStarter::identify(const std::string& filePathToReco
 RecognitionStarter::~RecognitionStarter() = default;
 
 RecognitionStarter::RecognitionStarter() {
-    // TODO: load real samples which will be base for recognition
-    loadVoiceSample("voiceName1", VoiceSample("TODO", DEFAULT_SAMPLE_RATE));
-    loadVoiceSample("voiceName2", VoiceSample("TODO", DEFAULT_SAMPLE_RATE));
-    loadVoiceSample("voiceName3", VoiceSample("TODO", DEFAULT_SAMPLE_RATE));
+    if(std::getenv(TEST_DATA_ENVIRONMENT_VARIABLE.c_str()) == nullptr) {
+        loadVoiceSamplesFromDirectory(std::filesystem::current_path().string());
+    }
+    else {
+        loadVoiceSamplesFromDirectory(std::getenv(TEST_DATA_ENVIRONMENT_VARIABLE.c_str()));
+    }
 }
 
 void RecognitionStarter::loadVoiceSample(const std::string& identifier,  const VoiceSample& voiceSample) {
@@ -56,11 +67,16 @@ void RecognitionStarter::loadVoiceSample(const std::string& identifier,  const V
         return;
     }
     voiceSampleLibrary[identifier] = voiceSample;
-    if(universalModel == nullptr) {
-        universalModel = std::make_shared<VoiceSample>(voiceSample);
-    }
-    else {
-        universalModel->merge(voiceSample);
+}
+
+void RecognitionStarter::loadVoiceSamplesFromDirectory(const std::string& pathToDirectory) {
+    for(auto& entry : std::filesystem::directory_iterator(pathToDirectory)) {
+        auto filePath = entry.path().string();
+        auto filenameWithoutExtension = entry.path().filename().string().substr(0, entry.path().filename().string().find('.'));
+        if(filenameWithoutExtension.find("sample_") != std::string::npos) {
+            auto sampleOwnerName = filenameWithoutExtension.substr(7);
+            loadVoiceSample(sampleOwnerName, VoiceSample(filePath, DEFAULT_SAMPLE_RATE));
+        }
     }
 }
 

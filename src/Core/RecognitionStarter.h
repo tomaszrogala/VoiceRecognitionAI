@@ -23,9 +23,11 @@ public:
 
 private:
     static float DEFAULT_SAMPLE_RATE;
+    static std::string TEST_DATA_ENVIRONMENT_VARIABLE;
 
     RecognitionStarter();
     void loadVoiceSample(const std::string& identifier, const VoiceSample& voiceSample);
+    void loadVoiceSamplesFromDirectory(const std::string& pathToDirectory);
 
     std::map<std::string, VoiceSample> voiceSampleLibrary;
     std::shared_ptr<VoiceSample> universalModel;

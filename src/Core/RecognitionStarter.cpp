@@ -3,7 +3,10 @@
 //
 
 #include "RecognitionStarter.h"
+
 #include <algorithm>
+#include <filesystem>
+
 #include "Logger.h"
 
 using namespace Utils;
@@ -25,24 +28,19 @@ RecognitionResult RecognitionStarter::identify(const std::string& filePathToReco
     }
 
     VoiceSample voiceSampleToRecognize(filePathToRecognize, DEFAULT_SAMPLE_RATE);
-    if(universalModel == nullptr) {
-        universalModel = std::make_shared<VoiceSample>(voiceSampleToRecognize);
-    }
-    else {
-        universalModel->merge(voiceSampleToRecognize);
-    }
     std::vector<RecognitionResult> resultArray;
 
     double distanceFromUniversalModel = voiceSampleToRecognize.getDistance(*universalModel);
 
     for (auto const& [identifier, voiceSample] : voiceSampleLibrary) {
         double distance = voiceSample.getDistance(voiceSampleToRecognize);
-        int probability = 100 - (int) (distance/((distance + distanceFromUniversalModel) * 100));
+        double calculatedDistanceFromUniversalModel = distance/(distance + distanceFromUniversalModel) * 100;
+        int probability = 100 - (int) calculatedDistanceFromUniversalModel;
         resultArray.emplace_back(identifier, probability, distance);
     }
 
     std::sort(resultArray.begin(), resultArray.end(), [](const auto& elem1, const auto& elem2) {
-        return elem1.getDistance() > elem2.getDistance();
+        return elem1.getDistance() < elem2.getDistance();
     });
 
     return resultArray.front();
@@ -74,6 +72,14 @@ void RecognitionStarter::loadVoiceSamplesFromDirectory(const std::string& pathTo
         if(filenameWithoutExtension.find("sample_") != std::string::npos) {
             auto sampleOwnerName = filenameWithoutExtension.substr(7);
             loadVoiceSample(sampleOwnerName, VoiceSample(filePath, DEFAULT_SAMPLE_RATE));
+        }
+    }
+    for(auto& sample: voiceSampleLibrary) {
+        if(universalModel == nullptr) {
+            universalModel = std::make_shared<VoiceSample>(sample.second);
+        }
+        else {
+            universalModel->merge(sample.second);
         }
     }
 }

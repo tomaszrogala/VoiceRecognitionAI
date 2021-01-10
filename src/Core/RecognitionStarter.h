@@ -7,6 +7,7 @@
 
 #include <string>
 #include <map>
+#include <memory>
 
 #include "RecognitionResult.h"
 #include "VoiceSample.h"

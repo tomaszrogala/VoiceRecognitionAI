@@ -7,6 +7,7 @@
 #include <string>
 #include <sstream>
 #include <utility>
+#include <iterator>
 #include <cmath>
 #include <AudioFile.h>
 

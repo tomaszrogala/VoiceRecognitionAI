@@ -3,9 +3,7 @@
 //
 
 #include "RecognitionStarter.h"
-
-#include <filesystem>
-
+#include <algorithm>
 #include "Logger.h"
 
 using namespace Utils;

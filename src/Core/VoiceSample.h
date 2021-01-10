@@ -6,6 +6,7 @@
 #define VOICERECOGNITIONAI_VOICESAMPLE_H
 
 #include <vector>
+#include <string>
 
 namespace Core {
 

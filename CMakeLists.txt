@@ -20,11 +20,14 @@ target_link_libraries(VoiceRecognitionAI PUBLIC
         Poco::Foundation
         Poco::Net
         Poco::Util
+        AudioFile
         Core
         Rest
         Utils)
 
 # Internal components
+
+add_subdirectory(${PROJECT_SOURCE_DIR}/ext/AudioFile)
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/src/Core)
 add_subdirectory(${PROJECT_SOURCE_DIR}/src/Rest)

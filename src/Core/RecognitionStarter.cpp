@@ -43,6 +43,10 @@ RecognitionResult RecognitionStarter::identify(const std::string& filePathToReco
         return elem1.getDistance() < elem2.getDistance();
     });
 
+    if(resultArray.front().getIdentifier() == "universal_model") {
+        resultArray.erase(resultArray.begin());
+    }
+
     return resultArray.front();
 }
 
@@ -75,11 +79,8 @@ void RecognitionStarter::loadVoiceSamplesFromDirectory(const std::string& pathTo
         }
     }
     for(auto& sample: voiceSampleLibrary) {
-        if(universalModel == nullptr) {
+        if(universalModel == nullptr && sample.first == "universal_model") {
             universalModel = std::make_shared<VoiceSample>(sample.second);
-        }
-        else {
-            universalModel->merge(sample.second);
         }
     }
 }

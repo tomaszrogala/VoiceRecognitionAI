@@ -28,12 +28,10 @@ void Normalizer::normalize(std::vector<double>& samples) {
     }
     if (max < 5 * std::numeric_limits<float>::min()) { // ulp of 0.0 is extremely small ! i.e. as small as it can get
         return;
-        //return 1.0;
     }
     for (double& sample : samples) {
         sample /= max;
     }
-    //return 1.0 / max;
 }
 
 }

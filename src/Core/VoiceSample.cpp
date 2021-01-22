@@ -20,7 +20,6 @@ using namespace Utils;
 
 namespace Core {
 
-// TODO: implement extraction of features from "extractFeatures" from Recognito.java
 std::vector<double> VoiceSample::extractFeaturesFromSampleFile(const std::string& filePath, float sampleRate) {
     /// Open file
     AudioFile<double> audioFile(filePath);
@@ -47,7 +46,7 @@ std::vector<double> VoiceSample::extractFeaturesFromSampleFile(const std::string
         buffer.resize(1);
         buffer.front().resize(audioFile.samples.front().size());
         for (auto& sample : buffer.front()) {
-            sample =
+            sample = // assing converted data
         }*/
     }
 

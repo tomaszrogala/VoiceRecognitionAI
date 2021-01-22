@@ -24,7 +24,6 @@ std::vector<double> LpcExtractor::extractFeatures(std::vector<double>& samples, 
 
     for (int i = 0; (i + windowSize) <= samples.size(); i += halfWindowLength) {
 
-        //audioWindow.insert(audioWindow.begin(), &samples[i], &samples[i + windowSize]);
         std::copy(&samples[i], &samples[i + windowSize], &audioWindow[0]);
 
         for (int j = 0; j < audioWindow.size(); j++) {

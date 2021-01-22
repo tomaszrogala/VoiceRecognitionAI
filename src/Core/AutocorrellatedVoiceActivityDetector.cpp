@@ -25,7 +25,6 @@ void AutocorrellatedVoiceActivityDetector::removeSilence(std::vector<double>& sa
     window.resize(windowsSize);
 
     for(int position = 0; position + windowsSize < samples.size(); position += windowsSize) {
-        //window.insert(window.begin(), &samples[position], &samples[position+windowsSize]);
         std::copy(&samples[position], &samples[position + windowsSize], &window[0]);
         double mean = bruteForceAutocorrelation(window, correlation);
         std::fill(&result[position], &result[position + windowsSize], mean > threshold);
@@ -50,7 +49,6 @@ void AutocorrellatedVoiceActivityDetector::removeSilence(std::vector<double>& sa
                 }
                 int endIndex = startIndex + counter;
                 applyFadeInFadeOut(samples, fadeLength, startIndex, endIndex);
-                //shortenedVoiceSample.insert(shortenedVoiceSample.end(), &samples[startIndex], &samples[startIndex+counter]);
                 std::copy(&samples[startIndex], &samples[startIndex+counter], &shortenedVoiceSample[copyCounter]);
                 copyCounter += counter;
             }
